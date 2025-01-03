@@ -1,0 +1,42 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Products</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            padding-top: 20px;
+        }
+        .card {
+            margin-bottom: 20px;
+        }
+        .form-control[readonly] {
+            background-color: #e9ecef;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center mb-5">Edit Products</h1>
+          <div class="email" data-username="{{ email }}"></div>
+        <section id="products" class="mb-5">
+            <input type="text" placeholder="search product">
+            <button>search</button>
+            
+            <h2 class="text-center">Products You Have Uploaded</h2>
+            <div class="row " id="product-list">
+               
+               
+                <!-- Add more product cards as needed -->
+            </div>
+        </section>
+    </div>
+     <script src="../static/js/Account.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

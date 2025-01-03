@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Comprehensive Account Dashboard</title>
+  <style>
+    /* Global Styles */
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #333;
+      background: linear-gradient(135deg, #eef2f3, #dfe9f3);
+    }
+
+    a {
+      text-decoration: none;
+      color: #007bff;
+      transition: color 0.3s ease;
+    }
+
+    a:hover {
+      color: #0056b3;
+    }
+
+    /* Dashboard Layout */
+    .dashboard-container {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 260px;
+      background: #fff;
+      padding: 20px;
+      border-right: 2px solid #ddd;
+      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .profile {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .profile-img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      margin-bottom: 15px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .username {
+      font-size: 20px;
+      font-weight: bold;
+      margin: 8px 0;
+      color: #333;
+    }
+
+    .email {
+      font-size: 14px;
+      color: #666;
+    }
+
+    .menu ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .menu li {
+      margin: 20px 0;
+    }
+
+    .menu a {
+      font-size: 16px;
+      color: #333;
+      display: block;
+      padding: 12px;
+      border-radius: 8px;
+      background: #f8f9fa;
+      transition: all 0.3s ease;
+    }
+
+    .menu a:hover {
+      background-color: #007bff;
+      color: #fff;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      padding: 40px;
+      background: #f4f5f7;
+    }
+
+    .main-content h1, .main-content h2 {
+      color: #0056b3;
+    }
+
+    .section {
+      margin-bottom: 40px;
+    }
+
+    .section h2 {
+      margin-bottom: 20px;
+      font-size: 24px;
+    }
+
+    .overview-cards {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .card {
+      background: #fff;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      flex: 1;
+      text-align: center;
+      min-width: 200px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    .card h3 {
+      margin-bottom: 15px;
+      font-size: 18px;
+      color: #333;
+    }
+
+    .card p {
+      font-size: 24px;
+      font-weight: bold;
+      color: #007bff;
+    }
+
+    .order-table, .settings-form {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .order-table th, .order-table td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: left;
+    }
+
+    .order-table th {
+      background-color: #f8f9fa;
+      color: #333;
+    }
+
+    .settings-form input, .settings-form button {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+    }
+
+    .settings-form button {
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .settings-form button:hover {
+      background-color: #0056b3;
+    }
+
+    /* Notification Styles */
+    .notification-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px;
+      margin-bottom: 8px;
+      background: #fff;
+      border-radius: 6px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      transition: background 0.3s ease;
+    }
+
+    .notification-item:hover {
+      background: #f8f9fa;
+    }
+
+    .notification-text {
+      font-size: 14px;
+      color: #333;
+    }
+
+    .notification-time {
+      font-size: 12px;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="profile">
+        <img src="https://via.placeholder.com/100" alt="User Profile" class="profile-img">
+        <h2 class="username">{{username}}</h2>
+        <p class="email">{{email}}</p>
+      </div>
+      <nav class="menu">
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="#orders">Order History</a></li>
+          <li><a href="#settings">Account Settings</a></li>
+          <li><a href="#notifications">Notifications</a></li>
+          <li><a href="#help">Help & Support</a></li>
+          <li><a href="/logout/">Logout</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <section id="overview" class="section">
+        <h1>Welcome, {{ username }}</h1>
+        <div class="overview-cards">
+          <div class="card">
+            <h3>Total Orders</h3>
+            <p>15</p>
+          </div>
+          <div class="card">
+            <h3>Pending Orders</h3>
+            <p>3</p>
+          </div>
+          <div class="card">
+            <h3>Account Balance</h3>
+            <p>$125.50</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="orders" class="section">
+        <h2>Order History</h2>
+        <table class="order-table">
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Date</th>
+              <th>Status</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>001</td>
+              <td>2024-12-01</td>
+              <td>Completed</td>
+              <td>$45.00</td>
+            </tr>
+            <tr>
+              <td>002</td>
+              <td>2024-12-02</td>
+              <td>Pending</td>
+              <td>$30.00</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="settings" class="section">
+        <h2>Account Settings</h2>
+        <form class="settings-form">
+          <input type="text" placeholder="Name" value="John Doe">
+          <input type="email" placeholder="Email" value="johndoe@example.com">
+          <button type="submit">Save Changes</button>
+        </form>
+      </section>
+
+      <section id="notifications" class="section">
+        <h2>Notifications</h2>
+        <div id="notification-list">
+          <!-- Notifications will be dynamically added here -->
+        </div>
+      </section>
+
+      <section id="help" class="section">
+        <h2>Help & Support</h2>
+        <p>Contact our support team at support@example.com</p>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const notifications = [
+      { text: "Your order #001 has been shipped.", time: "2 hours ago" },
+      { text: "You have a new message from support.", time: "5 hours ago" },
+      { text: "Order #002 is pending. Please complete payment.", time: "1 day ago" },
+    ];
+
+    const notificationList = document.getElementById('notification-list');
+
+    notifications.forEach((notification) => {
+      const notificationItem = document.createElement('div');
+      notificationItem.classList.add('notification-item');
+
+      const notificationText = document.createElement('div');
+      notificationText.classList.add('notification-text');
+      notificationText.textContent = notification.text;
+
+      const notificationTime = document.createElement('div');
+      notificationTime.classList.add('notification-time');
+      notificationTime.textContent = notification.time;
+
+      notificationItem.appendChild(notificationText);
+      notificationItem.appendChild(notificationTime);
+      notificationList.appendChild(notificationItem);
+    });
+  </script>
+</body>
+</html>
