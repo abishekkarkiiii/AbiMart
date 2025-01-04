@@ -25,7 +25,7 @@ from Account.login import home_view
 from Account.UserAccount import useraccount_dashboard,logout_view
 from django.shortcuts import render, redirect
 from Product.productslogic import get_categories
-from Grocery.Main import getlocation
+from Grocery.main import getlocation
 # from Account.login import home_view
 
 

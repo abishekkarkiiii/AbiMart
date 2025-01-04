@@ -1,14 +1,14 @@
 from Product.models import  Product_Table as pr
-from django.http import HttpResponse
 from django.shortcuts import render,redirect
 from Account.UserAccount import UserAccount
 from django.http import JsonResponse
 import os
 import uuid
+import json
 from PIL import Image
 from django.contrib.auth.decorators import login_required
-from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
+from Grocery.settings import BASE_DIR
 # def create_products(request):
 #     pr(
 #        product_name=request.POST.get('productname'),
@@ -33,9 +33,7 @@ def create_categories_image(request):
         
         # Fetch category and dynamically set the directory
         category = request.POST.get('categories')
-        base_dir = r"C:\Projects\PythonProjects\Grocery\static\productimages"
-        
-        
+        base_dir =os.path.join(BASE_DIR,'static','productimages')      
         if not category:
             return JsonResponse({'status': 'error', 'message': 'Category not specified'}, status=400)
         
@@ -55,6 +53,7 @@ def create_categories_image(request):
             img = img.resize((195, 210), Image.Resampling.LANCZOS)  # Resize with high-quality filtering
             img.save(save_path)  # Save the resized image
         except Exception as e:
+            print(e)
             return JsonResponse({'status': 'error', 'message': f"Image processing failed: {str(e)}"}, status=500)
         
         # Save product details in the database
@@ -142,7 +141,6 @@ def product_delete(request):
         return redirect('/account/')
     return redirect('/account/')
 
-import json
 @csrf_exempt
 def product_update(request):
     if request.method == 'POST':
@@ -174,9 +172,3 @@ def product_get_all_products_UploadedByUser(request):
 @login_required(login_url='/login/')
 def edit_product(request):
  return render(request, 'edit_product.html')
-
-
-
-
-
-

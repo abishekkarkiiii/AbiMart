@@ -1,8 +1,30 @@
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
+import re
 from math import radians, sin, cos, sqrt, atan2
 
+def is_within_1km(lat1, lon1, lat2, lon2):
+    # Radius of the Earth in km
+    R = 6371.0
+
+    # Convert latitude and longitude from degrees to radians
+    lat1 = radians(lat1)
+    lon1 = radians(lon1)
+    lat2 = radians(lat2)
+    lon2 = radians(lon2)
+
+    # Compute differences
+    dlat = lat2 - lat1
+    dlon = lon2 - lon1
+
+    # Haversine formula
+    a = sin(dlat / 2)**2 + cos(lat1) * cos(lat2) * sin(dlon / 2)**2
+    c = 2 * atan2(sqrt(a), sqrt(1 - a))
+    distance = R * c
+
+    # Check if distance is within 1 km
+    return distance <= 1.0
 @csrf_exempt  # Disable CSRF protection for this view (use with caution)
 def getlocation(request):
     if request.method == 'POST':
@@ -33,34 +55,12 @@ def getlocation(request):
                 return JsonResponse({"message": "Location received", "longitude": longitude, "latitude": latitude, "near": False})
 
 
-            return JsonResponse({"message": "Location received", "longitude": longitude, "latitude": latitude})
         except json.JSONDecodeError:
             return JsonResponse({"error": "Invalid JSON data"}, status=400)
     else:
         return JsonResponse({"error": "Invalid request method"}, status=405)
     
 
-def is_within_1km(lat1, lon1, lat2, lon2):
-    # Radius of the Earth in km
-    R = 6371.0
-
-    # Convert latitude and longitude from degrees to radians
-    lat1 = radians(lat1)
-    lon1 = radians(lon1)
-    lat2 = radians(lat2)
-    lon2 = radians(lon2)
-
-    # Compute differences
-    dlat = lat2 - lat1
-    dlon = lon2 - lon1
-
-    # Haversine formula
-    a = sin(dlat / 2)**2 + cos(lat1) * cos(lat2) * sin(dlon / 2)**2
-    c = 2 * atan2(sqrt(a), sqrt(1 - a))
-    distance = R * c
-
-    # Check if distance is within 1 km
-    return distance <= 1.0
 
 
 
@@ -69,7 +69,6 @@ def dms_to_decimal(dms_str):
     Convert a DMS (degrees, minutes, seconds) string to decimal degrees.
     Example input: "27°41'46.4\"N"
     """
-    import re
 
     # Regular expression to parse the DMS string
     dms_pattern = re.compile(r"(\d+)°(\d+)'([\d.]+)\"([NSEW])")

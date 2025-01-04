@@ -65,10 +65,10 @@ function saveChanges(productId) {
     const product_name = document.querySelector(`.product-name`).value;
     const details = document.querySelector(`.product-details`).value;
     const price = document.querySelector(`.product-price`).value;
-    const formData = new FormData();
-    if(document.querySelector('.product-image').files[0]){
-        formData.append('image', document.querySelector('.product-image').files[0]);
-    }
+    // const formData = new FormData();
+    // if(document.querySelector('.product-image').files[0]){
+    //     formData.append('image', document.querySelector('.product-image').files[0]);
+    // }
     fetch('/update_product/', {
         method: 'POST',
         headers: {
@@ -81,7 +81,7 @@ function saveChanges(productId) {
             'details': details,
             'price': price,
             // 'image': document.querySelector('.product-image').files[0]
-        },formData)
+        })
     }).then(response => {
         if (response.ok) {
             console.log('Product updated successfully');
