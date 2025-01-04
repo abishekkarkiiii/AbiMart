@@ -1,9 +1,6 @@
-from django.contrib.auth.hashers import make_password
 from django.http import HttpResponse
 from django.shortcuts import render
-# from .models import UserAccount  # Assuming your custom user model is called UserAccount
 from django.shortcuts import render, redirect
-from django.contrib.auth.models import User
 from Account.models import UserAccount
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
