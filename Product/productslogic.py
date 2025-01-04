@@ -22,7 +22,8 @@ from Grocery.settings import BASE_DIR
 #     return redirect('/account/')
 
 
-
+def handle_image(request):
+    pass
 
 def create_categories_image(request):
     if request.method == 'POST':
@@ -145,13 +146,16 @@ def product_delete(request):
 def product_update(request):
     if request.method == 'POST':
         try:
+            image = request.FILES.get("image")
+            print(image)
             data = json.loads(request.body)
             id = data.get('id')
             product = pr.objects.get(id=id)
             product.product_name = data.get('name')
             product.details = data.get('details')
             product.price = data.get('price')
-            if 'image' in request.FILES:
+            if image:
+                print("Image aahho")
                 product.image = request.FILES['image']
 
             product.save()

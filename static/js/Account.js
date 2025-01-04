@@ -69,6 +69,13 @@ function saveChanges(productId) {
     // if(document.querySelector('.product-image').files[0]){
     //     formData.append('image', document.querySelector('.product-image').files[0]);
     // }
+    //Hami eta adkeko thyo geda muji code.
+    fetch
+
+
+
+
+
     fetch('/update_product/', {
         method: 'POST',
         headers: {
