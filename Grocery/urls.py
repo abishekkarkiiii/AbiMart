@@ -26,6 +26,7 @@ from Account.UserAccount import useraccount_dashboard,logout_view
 from django.shortcuts import render, redirect
 from Product.productslogic import get_categories
 from Grocery.Main import getlocation
+from Payment_Model.payment import buy
 # from Account.login import home_view
 
 
@@ -42,6 +43,7 @@ urlpatterns = [
     path('logout/',logout_view),
     path('categories/',get_categories),
     path('getlocation/',getlocation),
+    path('buy/',buy),
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 LOGIN_URL = '/login/'

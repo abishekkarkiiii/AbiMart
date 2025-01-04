@@ -9,6 +9,8 @@ from PIL import Image
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
+import json
+import os
 # def create_products(request):
 #     pr(
 #        product_name=request.POST.get('productname'),
@@ -66,7 +68,8 @@ def create_categories_image(request):
                 username=request.user.username,
                 name=UserAccount.objects.get(email=request.user.username),
                 image=f'/static/productimages/{category}/{unique_filename}',  # Path to access the image
-                categories=category
+                categories=category,
+                unique_name=unique_filename
             )
         except Exception as e:
             return JsonResponse({'status': 'error', 'message': f"Database save failed: {str(e)}"}, status=500)
@@ -113,6 +116,7 @@ def get_categories(request):
             'username': product.username,
             'name': product.name,
             'categories': product.categories,
+            
         }
         
         product_list.append(product_data)
@@ -142,26 +146,73 @@ def product_delete(request):
         return redirect('/account/')
     return redirect('/account/')
 
-import json
+
 @csrf_exempt
 def product_update(request):
     if request.method == 'POST':
         try:
-            data = json.loads(request.body)
-            id = data.get('id')
-            product = pr.objects.get(id=id)
-            product.product_name = data.get('name')
-            product.details = data.get('details')
-            product.price = data.get('price')
+            # Get product first
+            product = pr.objects.get(id=request.POST.get('id'))
+            
+            # Update basic fields
+            product.product_name = request.POST.get('name')
+            product.details = request.POST.get('details')
+            product.price = request.POST.get('price')
+            
+            # Handle image upload if present
             if 'image' in request.FILES:
-                product.image = request.FILES['image']
-
+                image_file = request.FILES['image']
+                category = product.categories
+                base_dir = r"C:\Projects\PythonProjects\Grocery\static\productimages"
+                custom_dir = os.path.join(base_dir, category)
+                os.makedirs(custom_dir, exist_ok=True)
+                unique_filename = f"{uuid.uuid4().hex}_{image_file.name}"
+                save_path = os.path.join(custom_dir, unique_filename)
+                imagename=product.unique_name
+                
+                try:
+                 
+                    with Image.open(image_file) as img:
+                        img = img.resize((195, 210), Image.Resampling.LANCZOS)
+                        img.save(save_path)
+                    
+                    relative_path = f"/static/productimages/{category}/{unique_filename}"
+                    product.image = relative_path
+                    
+                except Exception as e:
+                    return JsonResponse({
+                        'success': False,
+                        'message': f"Image processing failed: {str(e)}"
+                    }, status=500)
+            
             product.save()
-            return JsonResponse({'success': True, 'message': 'Product updated successfully'})
-        except Exception as e:
-            return JsonResponse({'success': False, 'message': str(e)})
-    return JsonResponse({'success': False, 'message': 'Invalid request method'})
+            file_path = f'C:/Projects/PythonProjects/Grocery/static/productimages/{category}/{imagename}'  # Replace with the correct path
+            if os.path.exists(file_path):
+                os.remove(file_path)
+                print(f"{file_path} deleted successfully.")
+            else:
+                print(f"{file_path} not found.")
 
+            return JsonResponse({
+                'success': True,
+                'message': 'Product updated successfully'
+            })
+            
+        except pr.DoesNotExist:
+            return JsonResponse({
+                'success': False,
+                'message': 'Product not found'
+            }, status=404)
+        except Exception as e:
+            return JsonResponse({
+                'success': False,
+                'message': str(e)
+            }, status=500)
+    
+    return JsonResponse({
+        'success': False,
+        'message': 'Invalid request method'
+    }, status=405)
 
 @csrf_exempt
 def product_get_all_products_UploadedByUser(request):

@@ -16,6 +16,7 @@ urlpatterns = [
     path('all_productsByUser/',product_get_all_products_UploadedByUser),
     path('Edit/',edit_product),
     path('update_product/',product_update),
+     path('update_image/',product_update),
 
 
    

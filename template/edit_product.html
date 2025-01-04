@@ -1,11 +1,11 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Products</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
     <style>
         body {
             padding-top: 20px;
@@ -16,27 +16,76 @@
         .form-control[readonly] {
             background-color: #e9ecef;
         }
+        .sidebar {
+            width: 280px;
+            height: 100vh;
+            background-color: #f8f9fa;
+            border-right: 1px solid #dee2e6;
+        }
+        .sidebar-link {
+            padding: 10px 15px;
+            color: #333;
+            text-decoration: none;
+            display: block;
+            transition: background-color 0.3s;
+        }
+        .sidebar-link:hover {
+            background-color: #e9ecef;
+            color: #0d6efd;
+        }
+        .sidebar-user {
+            padding: 20px;
+            border-bottom: 1px solid #dee2e6;
+        }
     </style>
 </head>
 <body>
+    <!-- Toggle Button -->
+    <button class="btn btn-primary position-fixed top-0 start-0 m-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar">
+        <i class="bi bi-list"></i>
+    </button>
+
+    <!-- Sidebar -->
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="sidebar">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title">Menu</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+        </div>
+        <div class="offcanvas-body p-0">
+            <div class="sidebar-user">
+                <div class="d-flex align-items-center">
+                    <i class="bi bi-person-circle fs-1 me-2"></i>
+                    <div>
+                        <h6 class="mb-0">Welcome</h6>
+                        <small class="email" data-username="{{ email }}">{{ email }}</small>
+                    </div>
+                </div>
+            </div>
+            <nav class="nav flex-column">
+                <a href="/" class="sidebar-link"><i class="bi bi-house me-2"></i> Home</a>
+                <a href="/account/" class="sidebar-link"><i class="bi bi-person me-2"></i> Account</a>
+                <a href="/upload/" class="sidebar-link"><i class="bi bi-cloud-upload me-2"></i> Upload Product</a>
+                <a href="/logout/" class="sidebar-link"><i class="bi bi-box-arrow-right me-2"></i> Logout</a>
+            </nav>
+        </div>
+    </div>
+
     <div class="container">
         <h1 class="text-center mb-5">Edit Products</h1>
-          <div class="email" data-username="{{ email }}"></div>
         <section id="products" class="mb-5">
-            <input type="text" placeholder="search product">
-            <button>search</button>
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" placeholder="Search product">
+                <button class="btn btn-primary">Search</button>
+            </div>
             
             <h2 class="text-center">Products You Have Uploaded</h2>
-            <div class="row " id="product-list">
-               
-               
-                <!-- Add more product cards as needed -->
+            <div class="row" id="product-list">
+                <!-- Product cards will be added dynamically -->
             </div>
         </section>
     </div>
-     <script src="../static/js/Account.js"></script>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script src="../static/js/Account.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

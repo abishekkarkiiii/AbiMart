@@ -1,44 +1,44 @@
 
 // for cordinates of user
 
-function getUserLocation() {
-    return new Promise((resolve, reject) => {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    const { latitude, longitude } = position.coords;
-                    resolve({ latitude, longitude });
-                },
-                (error) => {
-                    reject(`Error getting location: ${error.message}`);
-                }
-            );
-        } else {
-            reject("Geolocation is not supported by this browser.");
-        }
-    });
-}
+// function getUserLocation() {
+//     return new Promise((resolve, reject) => {
+//         if (navigator.geolocation) {
+//             navigator.geolocation.getCurrentPosition(
+//                 (position) => {
+//                     const { latitude, longitude } = position.coords;
+//                     resolve({ latitude, longitude });
+//                 },
+//                 (error) => {
+//                     reject(`Error getting location: ${error.message}`);
+//                 }
+//             );
+//         } else {
+//             reject("Geolocation is not supported by this browser.");
+//         }
+//     });
+// }
 
 
-getUserLocation()
-    .then(location => {
-        console.log(location)
-        fetch('/getlocation/',{
-            method:'post',
-            headers:{
-                'Content-Type':'application/json'
-            },
-            body:JSON.stringify({
-                'latitude':location.latitude,
-                'longitude':location.longitude,
-            })
-        })
+// getUserLocation()
+//     .then(location => {
+//         console.log(location)
+//         fetch('/getlocation/',{
+//             method:'post',
+//             headers:{
+//                 'Content-Type':'application/json'
+//             },
+//             body:JSON.stringify({
+//                 'latitude':location.latitude,
+//                 'longitude':location.longitude,
+//             })
+//         })
         
-        console.log("User location:", location);
-    })
-    .catch(error => {
-        console.error(error);
-    });
+//         console.log("User location:", location);
+//     })
+//     .catch(error => {
+//         console.error(error);
+//     });
 
 
 
@@ -198,4 +198,32 @@ document.getElementById("cart_close").addEventListener("click", function() {
    }
 });
 
+// for buying the product
+function buy(){
+    fetch('/buy/',{
+      method:'post',
+      headers:{
+          'Content-Type':'application/json',
+          'X-CSRFToken': getCookie('csrftoken')
+      },
+      body:JSON.stringify({
+            'cartItems':cartItems, 
+      })
+    })}
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
 

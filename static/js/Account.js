@@ -17,7 +17,7 @@ async function fetchData(url) {
     }
 }
 // console.log(getCookie('csrftoken'))
-function getCookie(name) {
+ function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
         const cookies = document.cookie.split(';');
@@ -62,33 +62,38 @@ function createProductCard(product) {
 }});
 
 function saveChanges(productId) {
-    const product_name = document.querySelector(`.product-name`).value;
-    const details = document.querySelector(`.product-details`).value;
-    const price = document.querySelector(`.product-price`).value;
+    const card = document.querySelector(`[data-product-id="${productId}"]`).closest('.card-body');
     const formData = new FormData();
-    if(document.querySelector('.product-image').files[0]){
-        formData.append('image', document.querySelector('.product-image').files[0]);
+    
+    // Append all form data
+    formData.append('id', productId);
+    formData.append('name', card.querySelector('.product-name').value);
+    formData.append('details', card.querySelector('.product-details').value);
+    formData.append('price', card.querySelector('.product-price').value);
+    
+    // Append image if exists
+    const fileInput = card.querySelector('.image-upload');
+    if (fileInput && fileInput.files[0]) {
+        formData.append('image', fileInput.files[0]);
     }
+
     fetch('/update_product/', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
             'X-CSRFToken': getCookie('csrftoken')
         },
-        body: JSON.stringify({
-            'id': productId,
-            'name': product_name,
-            'details': details,
-            'price': price,
-            // 'image': document.querySelector('.product-image').files[0]
-        },formData)
-    }).then(response => {
-        if (response.ok) {
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
             console.log('Product updated successfully');
+            location.reload();
         } else {
-            console.log('Product update failed');
+            console.log('Product update failed:', data.message);
         }
-    });
+    })
+    .catch(error => console.error('Error:', error));
 }
 
 
@@ -111,3 +116,5 @@ function deleteProduct(productId) {
     });
     
 }
+
+module.exports.getCookie = getCookie;
